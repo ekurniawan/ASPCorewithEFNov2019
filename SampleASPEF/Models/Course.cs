@@ -14,5 +14,6 @@ namespace SampleASPEF.Models
         public int Credits { get; set; }
         
         public ICollection<Enrollment> Enrollments { get; set; }
+
     }
 }
