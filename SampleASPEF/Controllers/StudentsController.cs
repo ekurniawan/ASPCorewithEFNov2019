@@ -59,6 +59,51 @@ namespace SampleASPEF.Controllers
             return View();
         }
 
+        public async Task<IActionResult> InsertMultiple()
+        {
+            try
+            {
+                var newStudent = new Student
+                {
+                    FirstMidName = "Budi",
+                    LastName = "Kurniawan",
+                    Address = "Jl Mangga",
+                    EnrollmentDate = DateTime.Now
+                };
+
+                _context.Students.Add(newStudent);
+
+
+                var newCourse = new Course
+                {
+                    CourseID = 1045,
+                    Credits = 4,
+                    Title = "Data Science"
+                };
+
+                _context.Courses.Add(newCourse);
+
+                var newEnrollment = new Enrollment
+                {
+                    CourseID = 1050,
+                    StudentID = 2,
+                    Grade = Grade.A
+                };
+
+                _context.Enrollments.Add(newEnrollment);
+
+               
+
+                await _context.SaveChangesAsync();
+
+                return Content("Data berhasil ditambahkan !");
+
+            }
+            catch (DbUpdateException dbEx)
+            {
+                return Content(dbEx.Message);
+            }
+        }
         // POST: Students/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -91,7 +136,11 @@ namespace SampleASPEF.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students.FindAsync(id);
+            //var student = await _context.Students.FindAsync(id);
+            var student = await (from s in _context.Students
+                                where s.ID == id
+                                select s).FirstOrDefaultAsync();
+
             if (student == null)
             {
                 return NotFound();
