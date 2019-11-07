@@ -40,9 +40,10 @@ namespace SampleASPEF.Controllers
 
             //var student = await _context.Students
             //    .FirstOrDefaultAsync(m => m.ID == id);
-            var student = await (from s in _context.Students
-                                 where s.ID == id
-                                 select s).SingleOrDefaultAsync();
+            var student = await (from s in _context.Students.Include(s=>s.Enrollments)
+                                 .ThenInclude(e=>e.Course)
+                                 where s.ID==id
+                                 select s).AsNoTracking().FirstOrDefaultAsync();
             
             if (student == null)
             {
