@@ -10,6 +10,7 @@ namespace SampleASPEF.Data
     {
         public static void Initialize(ApplicationDbContext context)
         {
+            //menambahkan initialize
             context.Database.EnsureCreated();
             if (context.Students.Any())
             {
